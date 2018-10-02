@@ -10,6 +10,43 @@
     <title>Experiment</title>
 </head>
 <body>
-  <h1>Testing <i class="fa fa-spinner fa-pulse"></i></h1>  
+  <h1>Testing <i class="fa fa-spinner fa-pulse"></i></h1>
+  <div id="app">
+    <h1>{{message}}</h1>
+    <input type="text" v-model="message">
+    <br>
+    
+    <ul>
+      <li v-for="abala in bookings" v-on:hover="message = haha">{{abala.name}} ~~~~~ {{abala.date}}</li>
+    </ul>
+  </div>
+  
+  
+  
+  
+  <script src="../../_system/js/vendor/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Jojo',
+        bookings: [
+          {
+          name: 'Jojo',
+          date: 'October 1'
+          },
+          {
+          name: 'Ronel',
+          date: 'October 2'
+          },
+          {
+          name: 'Carl',
+          date: 'October 3'
+          },
+        ]
+      }
+    })
+  </script>
+  
 </body>
 </html>
