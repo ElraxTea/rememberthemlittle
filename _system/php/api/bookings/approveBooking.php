@@ -6,10 +6,10 @@ $username = "root";
 $password = "usbw";
 
 # Retrieve POST parameters
-$package_id = $_POST['package_id'];
+$booking_id = $_POST['booking_id'];
 
 # Check parameters if null
-if (isset($package_id)) {
+if (isset($booking_id)) {
 
     try {
 
@@ -18,7 +18,7 @@ if (isset($package_id)) {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         # Perform SQL Query
-        $sql = "DELETE FROM packages WHERE package_id = $package_id";
+        $sql = "UPDATE bookings SET booking_status='BOOKED' WHERE booking_id='$booking_id'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 

@@ -1,9 +1,9 @@
 <?php
 
 # Set database parameters
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
-$password = "root";
+$password = "usbw";
 
 # Retrieve POST parameters
 $addon_id = $_POST['addon_id'];

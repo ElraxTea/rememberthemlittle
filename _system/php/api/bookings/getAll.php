@@ -1,7 +1,7 @@
 <?php
 
 # Set database parameters
-$servername = "localhost:3307";
+$servername = "localhost:3307";  
 $username = "root";
 $password = "usbw";
 
@@ -12,7 +12,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     # Perform SQL Query
-    $stmt = $conn->prepare('SELECT * FROM packages');
+    $stmt = $conn->prepare('SELECT * FROM bookings');
     $stmt->execute();
 
     # Fetch Result

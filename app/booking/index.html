@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/_system/css/proxima.woff2.css">
+    <link rel="stylesheet" href="/_system/css/playfulcss/playfulcss.css">
+    <link rel="stylesheet" href="/_system/css/fontawesome-free-5.3.1-web/css/all.min.css">
+
+    <link rel="icon" href="/_system/images/favicon.png" <!-- Page Title -->
+    <title>Remember Them Little</title>
+
+</head>
+
+<body>
+
+    <!-- App -->
+    <div id="app" class="index">
+
+        <!-- Navigation Bar-->
+        <nav>
+
+            <!-- Company Logo -->
+            <h3><i class="fab fa-instagram"></i>Remember Them Little</h3>
+
+            <!-- Navigation Links -->
+            <ul>
+                <li><a href="#" class="color-dark">Home</a></li>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Packages</a></li>
+                <li><a href="#">Themes</a></li>
+            </ul>
+
+        </nav>
+
+        <main style="display: flex !important; flex-direction: row !important; justify-content: center">
+
+            <stepper steps=7 inline-template>
+                <div>
+
+                    <!-- Step 1 -->
+                    <form @submit.prevent="next" v-if="step==1" style="display: flex; flex-direction: column !important">
+                        <h5>Step 1</h5>
+                        <h3>Choose a Category</h3><br><br>
+
+                        <div class="card" v-for="category in $root.categories" style="padding: 1rem">
+
+                            <label :for="category.category_name">
+                                <input required type="radio" name="category" :id="category.category_name" v-model="$root.booking.category_id"
+                                    :value="category.category_id">
+                                <a>{{category.category_name}}</a>
+                            </label>
+                        </div>
+
+                        <br><br>
+                        <div class="flex">
+                            <button type="reset">Clear</button>
+                            <button type="submit" class="primary">Next</button>
+                        </div>
+
+                    </form>
+
+                    <!-- Step 2 -->
+                    <form @submit.prevent="next" v-if="step==2" style="display: flex; flex-direction: column !important">
+                        <h5>Step 2</h5>
+                        <h3>Choose a Package</h3><br><br>
+
+                        <div class="card" v-for="package in $root.packagesFromSelectedCategory" style="padding: 1rem">
+
+                            <label :for="package.package_name">
+                                <input required type="radio" name="package" :id="package.package_name" v-model="$root.booking.package_id"
+                                    :value="package.package_id">
+                                <a>{{package.package_name}}</a>
+                            </label>
+                        </div>
+
+                        <br><br>
+                        <div class="flex">
+                            <button @click.prevent="previous">Prev</button>
+                            <button type="reset">Clear</button>
+                            <button type="submit" class="primary">Next</button>
+                        </div>
+                    </form>
+
+                    <!-- Step 3 -->
+                    <form @submit.prevent="next" v-if="step==3" style="display: flex; flex-direction: column !important">
+                        <h5>Step 3</h5>
+                        <h3>Purchase Addons</h3><br><br>
+
+                        <div class="flex align-items-center">
+                            <select style="margin: 0" v-model="$root.selected_addon_id" name="addons">
+                                <option v-for="addon in $root.addons" :value="addon.addon_id">{{addon.addon_type}} -
+                                    {{addon.addon_description}}</option>
+                            </select>
+                            <button @click.prevent="$root.addAddon">Add</button>
+                        </div>
+
+                        <!-- Table -->
+                        <table style="display: table !important">
+
+                            <!-- Table headers -->
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+
+                            <!-- Table body -->
+                            <tbody>
+                                <tr v-for="addon_id in $root.booking.addon_ids">
+                                    <td>{{$root.getAddon(addon_id).addon_type}}</td>
+                                    <td>{{$root.getAddon(addon_id).addon_description}}</td>
+                                    <td>{{$root.getAddon(addon_id).addon_price}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br><br>
+                        <div class="flex">
+                            <button @click.prevent="previous">Prev</button>
+                            <button type="reset">Clear</button>
+                            <button type="submit" class="primary">Next</button>
+                        </div>
+
+                    </form>
+
+                    <!-- Step 4 -->
+                    <form @submit.prevent="next" v-if="step==4" style="display: flex; flex-direction: column !important">
+                        <h5>Step 4</h5>
+                        <h3>Choose Themes</h3><br><br>
+
+                        <select multiple size="5" style="height: auto" v-model="$root.booking.theme_ids">
+                            <option v-for="theme in $root.themes" :value="theme.theme_id">{{theme.theme_description}}</option>
+                        </select>
+
+                        <br><br>
+                        <div class="flex">
+                            <button @click.prevent="previous">Prev</button>
+                            <button type="reset">Clear</button>
+                            <button type="submit" class="primary">Next</button>
+                        </div>
+                    </form>
+
+                    <!-- Step 5 -->
+                    <form @submit.prevent="next" v-if="step==5" style="display: flex; flex-direction: column !important">
+                        <h5>Step 5</h5>
+                        <h3>Pick your Preferred Schedule</h3><br><br>
+
+                        <label>Choose a Date</label>
+                        <input type="date" v-model="$root.selected_date">
+
+                        <label>Choose a Time</label>
+                        <select v-model="$root.booking.selected_time">
+                            <option v-for="slot in $root.slots">{{slot}}</option>
+                        </select>
+
+
+                        <br><br>
+                        <div class="flex">
+                            <button @click.prevent="previous">Prev</button>
+                            <button type="reset">Clear</button>
+                            <button type="submit" class="primary">Next</button>
+                        </div>
+                    </form>
+
+                    <!-- Step 6 -->
+                    <form @submit.prevent="next" v-if="step==6" style="display: flex; flex-direction: column !important">
+                        <h5>Step 6</h5>
+                        <h3>Customer Information</h3><br><br>
+
+                        Facebook Account: 
+
+                        <br><br>
+                        <div class="flex">
+                            <button @click.prevent="previous">Prev</button>
+                            <button type="reset">Clear</button>
+                            <button type="submit" class="primary">Next</button>
+                        </div>
+                    </form>
+
+
+
+                </div>
+
+            </stepper>
+
+            <form>
+                <fieldset class="outline">
+                    <legend>Summary</legend>
+                    <label>Category: {{booking.category_id}}</label>
+                    <label>Package: {{booking.package_id}}</label>
+                    <label>Addons: {{booking.addon_ids}}</label>
+                    <label>Themes: {{booking.theme_ids}}</label>
+                    <label>Date: {{booking.booking_date}}</label>
+                    <label>Time: {{booking.selected_time}}</label>
+                </fieldset>
+            </form>
+
+        </main>
+
+    </div>
+
+    <!-- Imported Scripts -->
+    <script src="/_system/js/vendor/vue.js"></script>
+    <script src="/_system/js/components/components.js"></script>
+    <script src="/_system/js/vendor/vue-resource@1.5.1.js"></script>
+
+    <!-- Import Mixins -->
+    <script src="/_system/js/mixins/categories.js"></script>
+    <script src="/_system/js/mixins/packages.js"></script>
+    <script src="/_system/js/mixins/addons.js"></script>
+    <script src="/_system/js/mixins/themes.js"></script>
+    <script src="/_system/js/mixins/bookings.js"></script>
+
+    <!-- Local Scripts -->
+    <script>
+
+        var app = new Vue({
+
+            mixins: [CategoryMethods, PackageMethods, AddonMethods, ThemeMethods, BookingMethods],
+
+            el: '#app',
+
+            data: {
+
+                categories: [],
+                packages: [],
+                addons: [],
+                themes: [],
+
+                selected_addon_id: "",
+                selected_date: "",
+
+                slots: [],
+
+                booking: {
+                    category_id: "",
+                    package_id: "",
+                    addon_ids: [],
+                    theme_ids: [],
+                    booking_date: "",
+                    booking_time: ""
+
+                }
+            },
+
+            created() {
+                this.loadCategories();
+                this.loadPackages();
+                this.loadAddons();
+                this.loadThemes();
+            },
+
+            methods: {
+                addAddon() {
+                    this.booking.addon_ids.push(this.selected_addon_id)
+                }
+            },
+
+            computed: {
+
+                packagesFromSelectedCategory() {
+
+                    return this.filteredPackages(this.booking.category_id);
+                },
+
+            },
+
+            watch: {
+                selected_date: function () {
+                    this.booking.booking_date = this.selected_date;
+                    this.getOpenSlots(this.selected_date, this.getPackage(this.booking.package_id).package_minutes);
+                }
+            }
+
+
+
+
+
+
+        })
+
+    </script>
+
+</body>
+
+</html>
